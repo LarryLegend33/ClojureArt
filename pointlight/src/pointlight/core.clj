@@ -1,4 +1,4 @@
-(ns pointlight.core
+ (ns pointlight.core
   (:require [quil.core :as q]
             [genartlib.random :as gen]
             [quil.middleware :as m]
