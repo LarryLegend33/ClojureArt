@@ -1,0 +1,36 @@
+(ns pointlight.core
+  (:require [quil.core :as q]
+            [quil.middleware :as m]
+            [clojure.math.numeric-tower :as math]))
+(defn setup []
+  (q/frame-rate 30)
+  {:angle 0})
+
+(defn update-state [state]
+  {:angle (+ (:angle state) 0.1)})
+
+(defn draw-state [state]
+  ; Clear the screen by filling it with black
+  (q/background 0)
+  (q/fill 255 255 255)
+  (let [angle (:angle state)
+        x (* 50 (q/cos angle))
+        y (* 50 (q/sin angle))
+        dotsize 10]
+
+    ; with translation will be PERFECT binding motion
+    ; 0 is start point here
+    (q/with-translation [(+ 0 (* 4 (q/frame-count)))
+                         (/ (q/height) 2)]
+      (cond (> (* 4 (q/frame-count)) 700)
+            (q/ellipse 0 0 dotsize dotsize))
+      (q/ellipse x y dotsize dotsize))))
+
+(q/defsketch pointlight
+  :title "wheel"
+  :size [1800 500]
+  :setup setup
+  :update update-state
+  :draw draw-state
+  :features [:keep-on-top]
+  :middleware [m/fun-mode])
