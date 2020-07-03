@@ -1,4 +1,4 @@
- (ns pointlight.core
+(ns pointlight.core
   (:require [quil.core :as q]
             [genartlib.random :as gen]
             [quil.middleware :as m]
@@ -35,14 +35,16 @@
 
 (defn draw-state [state]
   ; Clear the screen by filling it with black
-  (q/background 0)
+  (q/background 0 0 0)
   (q/fill 255 255 255)
   (let [angle (:angle state)
         x (q/cos angle)
         y (q/sin angle)
-        e_noise 50
+        e_noise 0
         c_noise 0
         g_noise 0
+        jitter_edge 0
+        jitter_center 0
         center_x (+ (:center_x state) (offset_mem (:epoch state) g_noise 0))
         center_y (+ (:center_y state) (offset_mem (:epoch state) g_noise 1))
         orbit 50
@@ -52,14 +54,17 @@
     (q/with-translation [(+ center_x (offset_mem (:epoch state) c_noise 2))
                          (+ center_y (offset_mem (:epoch state) c_noise 3))]
       (cond (> center_x (/ envwidth 2))
-            (q/ellipse 0 0 dotsize dotsize)))
+            (q/ellipse (gen/gauss 0 jitter_center)
+                       (gen/gauss 0 jitter_center)
+                       dotsize
+                       dotsize)))
 
     ; add a dummy integer so offset is consistent through the 
     ; epoch but only for specific variables
     (q/with-translation [(+ center_x (offset_mem (:epoch state) e_noise 4))
                          (+ center_y (offset_mem (:epoch state) e_noise 5))]
-      (q/ellipse (* orbit x)
-                 (* orbit y)
+      (q/ellipse (gen/gauss (* orbit x) jitter_edge)
+                 (gen/gauss (* orbit y) jitter_edge)
                  dotsize
                  dotsize))))
 
