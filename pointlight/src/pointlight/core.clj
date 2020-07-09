@@ -4,7 +4,8 @@
             [quil.middleware :as m]
             [clojure.math.numeric-tower :as math]))
 
-(def envwidth 1500)
+(def envwidth 1000)
+(def envheight 560)
 
 (defn setup []
   (q/frame-rate 30)
@@ -37,16 +38,20 @@
   ; Clear the screen by filling it with black
   (q/background 0 0 0)
   (q/fill 255 255 255)
+  (q/stroke 255 255 255)
   (let [angle (:angle state)
         x (q/cos angle)
         y (q/sin angle)
-        e_noise 0
+        e_noise 30
         c_noise 0
         g_noise 0
         jitter_edge 0
         jitter_center 0
-        center_x (+ (:center_x state) (offset_mem (:epoch state) g_noise 0))
-        center_y (+ (:center_y state) (offset_mem (:epoch state) g_noise 1))
+        jitter_global 0
+     ;   center_x (+ (:center_x state) (offset_mem (:epoch state) g_noise 0))
+     ;   center_y (+ (:center_y state) (offset_mem (:epoch state) g_noise 1))
+        center_x (gen/gauss (:center_x state) jitter_global)
+        center_y (gen/gauss (:center_y state) 0)
         orbit 50
         dotsize 10]
 
@@ -55,7 +60,7 @@
                          (+ center_y (offset_mem (:epoch state) c_noise 3))]
       (cond (> center_x (/ envwidth 2))
             (q/ellipse (gen/gauss 0 jitter_center)
-                       (gen/gauss 0 jitter_center)
+                       (gen/gauss 0 0)
                        dotsize
                        dotsize)))
 
@@ -64,13 +69,16 @@
     (q/with-translation [(+ center_x (offset_mem (:epoch state) e_noise 4))
                          (+ center_y (offset_mem (:epoch state) e_noise 5))]
       (q/ellipse (gen/gauss (* orbit x) jitter_edge)
-                 (gen/gauss (* orbit y) jitter_edge)
+                 (gen/gauss (* orbit y) 0)
                  dotsize
                  dotsize))))
 
+
+
+
 (q/defsketch pointlight
   :title "wheel"
-  :size [envwidth 500]
+  :size [envwidth envheight]
   :setup setup
   :update update-state
   :draw draw-state

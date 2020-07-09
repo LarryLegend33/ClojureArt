@@ -48,27 +48,40 @@
   (q/fill 255 255 255)
   (q/stroke 255 255 255)
   (let [edge_noise 0
-        center_noise 0
+        center_noise 10
         global_noise 0
         y ((:triwave state) (:center_x state))]
-    (q/with-translation [(gen/gauss (:center_x state) global_noise)
+    (q/with-translation [(gen/gauss (:center_x state) 0)
                          (gen/gauss (:center_y state) 0)]
       (cond (> (:center_x state) (/ envwidth 2))
             (do
               (q/ellipse (gen/gauss 0 edge_noise) 0 10 10)
               (q/ellipse (gen/gauss 0 edge_noise) triangle_amp 10 10)))
-      (q/ellipse (gen/gauss 0 center_noise) y 10 10))))
+      ; (q/ellipse (gen/gauss 0 center_noise) y 10 10)
+      (q/ellipse (offset_mem (:epoch state) center_noise 0) y 10 10))))
 
-(q/defsketch diagonal
-  :title "diagonal motion illusion"
-  :size [envwidth envheight]
-  :setup setup
-  :draw draw-state
-  :update update-state
-  :features [:keep-on-top]
-  :middleware [m/fun-mode])
+;; (q/defsketch diagonal
+;;   :title "diagonal motion illusion"
+;;   :size [envwidth envheight]
+;;   :setup setup
+;;   :draw draw-state
+;;   :update update-state
+;;   :features [:keep-on-top]
+;;   :middleware [m/fun-mode])
 
 
-; Vid List: 8 total: noise free for first slide
-; second slide and third slide: low noise (10) edge, center, full. high noise too (30). high noise
-; on only one edge too. 
+; if you want to call this from outside cider, have to 
+; update project.clj with :main file and replace
+; defsketch with defn -main syntax below
+(defn -main [& args]
+  (q/sketch
+   :title "diagonal motion illusion"
+   :size [envwidth envheight]
+   :setup setup
+   :draw draw-state
+   :update update-state
+   :features [:keep-on-top]
+   :middleware [m/fun-mode]))
+
+
+o
