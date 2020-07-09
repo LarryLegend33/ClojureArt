@@ -1,6 +1,6 @@
 (ns sin_ellipse.core
-  (:require [quil.core :as q]
-            [dynne.sampled-sound :as ds]
+  (:require [overtone.live :as ot]
+            [quil.core :as q]
             [genartlib.random :as gen]
             [clojure.math.numeric-tower :as math]
             [quil.middleware :as m]))
@@ -8,16 +8,22 @@
 (def envwidth 1000)
 (def envheight 560)
 
+;; (defn tone
+;;   [dur]
+;;   (fn [freq]
+;;     (ot/demo 
+;;      (ot/sin-osc dur (+ 200 freq)))))
+
 (defn tone
   [dur]
   (fn [freq]
-    (ds/play
-     (ds/sinusoid dur freq))))
+    (ot/demo 0.0333 (ot/sin-osc (+ 400 freq)))))
+
 
 (defn setup []
   (q/frame-rate 30)
   {:angle 0
-   :tone_func (tone (* -1 (q/current-frame-rate)))
+   :tone_func (tone 0.03)
    :y_bump 0})
 
 
@@ -40,8 +46,8 @@
                            (- (:y_bump state))
                            :else (:y_bump state))]
 
-    ;; (cond (= (mod (q/frame-count) 1) 0)
-    ;;       ((:tone_func state) (* 20 (:y_bump state)))) 
+    (cond (= (mod (q/frame-count) 3) 0)
+          ((:tone_func state) (* 1 (:y_bump state)))) 
     (q/with-translation [(/ (q/width) 2)
                          (/ (q/height) 2)]
       (q/ellipse (gen/gauss x 0) (+ stim_height (:y_bump state)) 10 10)

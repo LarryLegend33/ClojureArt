@@ -4,7 +4,7 @@
   :license {:name "Eclipse Public License"
             :url "http://www.eclipse.org/legal/epl-v10.html"}
   :dependencies [[genartlib "0.1.20"]
-                 [org.craigandera/dynne "0.4.1"]
+                 [overtone "0.10.6"]
                  [org.clojure/clojure "1.10.1"]
                  [org.clojure/math.numeric-tower "0.0.4"]
                  [quil "3.1.0"]])
