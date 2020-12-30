@@ -1,0 +1,32 @@
+(ns rabtest.core
+  (:gen-class)
+  (:require [langohr.core      :as rmq]
+            [langohr.channel   :as lch]
+            [langohr.queue     :as lq]
+            [langohr.consumers :as lc]
+            [langohr.basic     :as lb]))
+
+(def ^{:const true}
+  default-exchange-name "")
+
+(def amqp-url (get (System/getenv) "amqp://guest:guest@localhost:5672"))
+
+(defn message-handler
+  [ch {:keys [content-type delivery-tag type] :as meta} ^bytes payload]
+  (println (format "[consumer] Received a message: %s, delivery tag: %d, content type: %s, type: %s"
+                   (String. payload "UTF-8") delivery-tag content-type type)))
+
+(defn -main
+  "I don't do a whole lot ... yet."
+  [& args]
+  (let [conn  (rmq/connect)
+        ch    (lch/open conn)
+        qname "hello"]
+    (println (format "[main] Connected. Channel id: %d" (.getChannelNumber ch)))
+    (lq/declare ch qname {:exclusive false :auto-delete false})
+    (lc/subscribe ch qname message-handler {:auto-ack true})
+    (Thread/sleep 2000)
+    (println "[main] Disconnecting...")
+    (rmq/close ch)
+    (rmq/close conn)))
+
