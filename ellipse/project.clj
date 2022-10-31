@@ -6,4 +6,6 @@
   :dependencies [[genartlib "0.1.20"]
                  [org.clojure/math.numeric-tower "0.0.4"]
                  [org.clojure/clojure "1.10.1"]
-                 [quil "3.1.0"]])
+                 [quil "4.0.0-SNAPSHOT-1"]
+;;                 [quil "3.1.0"]
+                 ])

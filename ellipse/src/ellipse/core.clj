@@ -17,7 +17,7 @@
                   (- 1 (/ (math/expt t 2) (math/expt a 2)))))))
 
 (defn setup []
-  (q/frame-rate 30)
+  (q/frame-rate 60)
   {:ellipse_path (ellipse_path (/ envwidth 4) (/ envheight 6))
    :epoch 1
    :translation_rate 4
@@ -25,8 +25,8 @@
    :center_y (/ envheight 2)})
 
 (defn update-state [state]
-  (q/frame-rate 30)
-  (print (:center_x state))
+  (q/frame-rate 50)
+;;  (print (:center_x state))
   (let [inc_x (+ (:center_x state) (:translation_rate state))
         dec_x (- (:center_x state) (:translation_rate state))]
     {:ellipse_path (:ellipse_path state)

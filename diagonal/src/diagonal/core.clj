@@ -60,28 +60,28 @@
       ; (q/ellipse (gen/gauss 0 center_noise) y 10 10)
       (q/ellipse (offset_mem (:epoch state) center_noise 0) y 10 10))))
 
-;; (q/defsketch diagonal
-;;   :title "diagonal motion illusion"
-;;   :size [envwidth envheight]
-;;   :setup setup
-;;   :draw draw-state
-;;   :update update-state
-;;   :features [:keep-on-top]
-;;   :middleware [m/fun-mode])
+(q/defsketch diagonal
+  :title "diagonal motion illusion"
+  :size [envwidth envheight]
+  :setup setup
+  :draw draw-state
+  :update update-state
+  :features [:keep-on-top]
+  :middleware [m/fun-mode])
 
 
 ; if you want to call this from outside cider, have to 
 ; update project.clj with :main file and replace
 ; defsketch with defn -main syntax below
-(defn -main [& args]
-  (q/sketch
-   :title "diagonal motion illusion"
-   :size [envwidth envheight]
-   :setup setup
-   :draw draw-state
-   :update update-state
-   :features [:keep-on-top]
-   :middleware [m/fun-mode]))
+;; (defn -main [& args]
+;;   (q/sketch
+;;    :title "diagonal motion illusion"
+;;    :size [envwidth envheight]
+;;    :setup setup
+;;    :draw draw-state
+;;    :update update-state
+;;    :features [:keep-on-top]
+;;    :middleware [m/fun-mode]))
 
 
-o
+
